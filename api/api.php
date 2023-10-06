@@ -1,6 +1,15 @@
 <?php
 require_once __DIR__ . '/config.php';
 class API {
+    private $conn;
+
+    function __construct() {
+        $this->conn = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+
+        if ($this->conn->connect_error) {
+            die("Connection failed: " . $this->conn->connect_error);
+        }
+    }
     function Submit(){
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405); // Method Not Allowed
@@ -8,7 +17,6 @@ class API {
             return false;
         }   
             $json = file_get_contents('php://input');
-            var_dump($json); die;
             $data = json_decode($json, true);
         
             if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
@@ -19,11 +27,23 @@ class API {
             } 
                 // Process $data as needed
                 // ...
-        
+                $email = $data['email'];
+                $pass = $data['pass'];
+                $sql = "INSERT INTO users (email, pass, active) VALUES ('$email', '$pass', 0)";
                 // Send a successful response
-                header('Content-Type: application/json');
-                http_response_code(200); // OK
-                echo json_encode(['message' => 'Data processed successfully']);
+                if ($this->conn->query($sql) === TRUE) {
+                    // Send a successful response
+                    header('Content-Type: application/json');
+                    http_response_code(200); // OK
+                    echo json_encode(['message' => 'Data processed successfully']);
+                } else {
+                    // Handle database error
+                    http_response_code(500); // Internal Server Error
+                    echo json_encode(['error' => 'Database error: ' . $this->conn->error]);
+                }
+        
+                // Close the database connection
+                $this->conn->close();
             
             
              
