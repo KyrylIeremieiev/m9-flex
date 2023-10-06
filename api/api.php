@@ -41,6 +41,20 @@ class API {
                     http_response_code(500); // Internal Server Error
                     echo json_encode(['error' => 'Database error: ' . $this->conn->error]);
                 }
+
+                //second query
+                $article = $data['article'];
+                $sql = "INSERT INTO subs (email, article) VALUES ('$email', '$article')";
+                if ($this->conn->query($sql) === TRUE) {
+                    // Send a successful response
+                    header('Content-Type: application/json');
+                    http_response_code(200); // OK
+                    echo json_encode(['message' => 'Data processed successfully']);
+                } else {
+                    // Handle database error
+                    http_response_code(500); // Internal Server Error
+                    echo json_encode(['error' => 'Database error: ' . $this->conn->error]);
+                }
         
                 // Close the database connection
                 $this->conn->close();
