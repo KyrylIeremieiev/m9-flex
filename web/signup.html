@@ -5,16 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="./js/createAccount.js" defer></script>
+    <link rel="stylesheet" href="./css/signup.css">
 </head>
 <body>
     <main>
         <article class="signup">
-            <textarea class="signup__email" id="email" cols="30" rows="1"></textarea>
-            <input class="signup__pass" type="password" name="" id="pass">
-            <select name="" id="article">
-                <option value="article1">Article 1</option>
-                <option value="article2">Article 2</option>
-            </select>
+            <div>
+                <h2>Email</h2>
+                <textarea class="signup__email" id="email" cols="30" rows="1"></textarea>
+            </div>
+            <div>
+                <h2>Password</h2>
+                <input class="signup__pass" type="password" name="" id="pass">
+            </div>
+            <div>
+                <h2>Article Select</h2>
+                <select name="" id="article">
+                    <option value="article1">Article 1</option>
+                    <option value="article2">Article 2</option>
+                </select>
+                
+            </div>
             <button class="signup__btn" id="submitBtn">Signup</button>
         </article>
     </main>
