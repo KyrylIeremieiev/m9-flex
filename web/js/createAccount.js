@@ -19,7 +19,7 @@ class Signup{
                 method: "POST",
                 body: JSON.stringify({"email":this.email.value, 'pass':this.pass.value, 'article':this.article.value})
             })
-            .then(function(res){ console.log(res) })
+            .then(()=>{ document.cookie = "user=" + this.email.value; window.location.replace('./signup.html')})
             .catch(function(res){ console.log(res) })
             return
         }
