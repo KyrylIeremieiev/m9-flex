@@ -2,15 +2,28 @@ class App{
 
     constructor(title, p){
         this.title = title;
-        this.p = p
+        this.p = p;
         this.user = this.getCookie("user");
         if(this.user == null){
             window.location.replace('./signup.html')
         }
-            this.getData()
-            console.log(this.userData);
-            console.log(this.articleData)
+            this.getData().then(()=>{
+                this.assignData();
+            })
+            
     }
+
+    assignData(){
+        if(this.userData[0].article == 'article1'){
+            this.title.innerText = this.articleData[0].Title;
+            this.p.innerText = this.articleData[0].Text;
+            return
+        }
+            this.title.innerText = this.articleData[1].Title;
+            this.p.innerText = this.articleData[1].Text;
+        
+    }
+
     getCookie(cookieName) {
         var name = cookieName + "=";
         var decodedCookie = decodeURIComponent(document.cookie);
@@ -44,7 +57,7 @@ class App{
                 this.userData = data;
             })
             
-        await fetch("../data/data.json").then(response =>{
+        await fetch("http://localhost:8080/web/data/data.json").then(response =>{
             return response.json();
             }).then(data =>{
                 this.articleData = data;
