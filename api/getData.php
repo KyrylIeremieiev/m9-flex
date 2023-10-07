@@ -11,6 +11,16 @@ class Data {
         }
     }
     function getData(){
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            header("Access-Control-Allow-Origin: http://127.0.0.1:5500");
+            header("Access-Control-Allow-Methods: POST, OPTIONS");
+            header('Access-Control-Allow-Headers: Content-Type, Authorization');
+            header("Access-Control-Allow-Origin: *"); // Allow requests from any origin
+            header('Access-Control-Allow-Credentials', 'true');
+            http_response_code(200); // OK
+            exit();
+        }
+        
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405); // Method Not Allowed
             echo json_encode(['error' => 'Method not allowed']);
@@ -30,6 +40,12 @@ class Data {
                 $email = $data['email'];
                 $sql = "SELECT * FROM subs WHERE email = '$email'";
                 $result = $this->conn->query($sql);
+                /* header("Access-Control-Allow-Origin: *"); // Allow requests from any origin
+                header("Access-Control-Allow-Methods: POST, OPTIONS"); // Allow POST requests
+                header("Access-Control-Allow-Headers: Content-Type");
+                header("Access-Control-Allow-Origin: http://localhost:5500"); // Replace with your frontend URL
+                header("Access-Control-Allow-Origin: http://127.0.0.1:5500/");
+                header('Access-Control-Allow-Credentials', 'true'); */
                 if ($result->num_rows > 0) {
                     $data = array();
                     while ($row = $result->fetch_assoc()) {

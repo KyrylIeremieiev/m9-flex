@@ -5,9 +5,11 @@ class App{
         this.p = p
         this.user = this.getCookie("user");
         if(this.user == null){
-            /* window.location.replace('./signup.html') */
+            window.location.replace('./signup.html')
         }
             this.getData()
+            console.log(this.userData);
+            console.log(this.articleData)
     }
     getCookie(cookieName) {
         var name = cookieName + "=";
@@ -22,19 +24,32 @@ class App{
         return null;
     }
 
-    getData(){
-        fetch("http://localhost:8080/api/api.php",
+    async getData(){
+        await fetch("http://localhost:8080/api/getData.php",
             {
-                mode: 'no-cors',
                 headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
                 },
                 method: "POST",
-                body: JSON.stringify({"email":this.email.value, 'pass':this.pass.value, 'article':this.article.value})
+                credentials: 'include',
+                body: JSON.stringify({"email":this.user})
             })
-            .then(()=>{ document.cookie = "user=" + this.email.value; window.location.replace('./signup.html')})
-            .catch(function(res){ console.log(res) })
+            .then(response => response.json()) // Parse the JSON response
+            .then(data => {
+                // Handle the response data here
+                console.log("Response from the server:", data);
+
+                // Save the response data to a variable or use it as needed
+                this.userData = data;
+            })
+            
+        await fetch("../data/data.json").then(response =>{
+            return response.json();
+            }).then(data =>{
+                this.articleData = data;
+            });
+        
     }
 }
 let app = new App(document.getElementById('title'), document.getElementById('p'))
